@@ -1,0 +1,33 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: cephfs-auto-pvc-pod
+spec:
+  containers:
+  - name: cephfs-auto-pvc-pod
+    image: gcr.io/google_containers/busybox:1.24
+    command:
+      - "/bin/sh"
+    args:
+      - "-c"
+      - "touch /mnt/SUCCESS && exit 0 || exit 1"
+    volumeMounts:
+      - name: pvc
+        mountPath: "/mnt/"
+  restartPolicy: "Never"
+  volumes:
+    - name: pvc
+      persistentVolumeClaim:
+        claimName: claim1
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: claim1
+spec:
+  storageClassName: cephfs
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi

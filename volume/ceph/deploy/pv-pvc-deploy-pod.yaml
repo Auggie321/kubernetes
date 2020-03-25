@@ -1,0 +1,77 @@
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: myservice-pv
+  labels:
+    name: myservice-pv
+spec:
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteMany
+  cephfs:
+    monitors: 
+    - 192.168.2.148:6789
+    - 192.168.2.149:6789
+    - 192.168.2.150:6789
+    path: /data/myservice
+    user: cephfs
+    secretRef:
+      name: cephfs-secret
+    readOnly: false
+  persistentVolumeReclaimPolicy: Retain
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: myservice-pvc
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: ""
+  resources:
+    requests:
+      storage: 5Gi
+  selector:
+    matchLabels:
+      name: myservice-pv
+---
+kind: Deployment
+apiVersion: apps/v1beta2
+metadata:
+  labels:
+    app: myservice
+  name: myservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: myservice
+  template:
+    metadata:
+      labels:
+        app: myservice
+    spec:
+      containers:
+      - name: myservice
+        image: nginx
+        imagePullPolicy: Always
+        resources:
+          requests:
+            memory: "2Gi"
+            cpu: "250m"
+          limits:
+            memory: "2Gi"
+            cpu: "500m"
+        volumeMounts:
+          - name: data
+            mountPath: /data
+        ports:
+          - containerPort: 8080
+            protocol: TCP
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: myservice-pvc
