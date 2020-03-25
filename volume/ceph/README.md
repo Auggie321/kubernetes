@@ -15,6 +15,7 @@
 ## Install without RBAC roles
 
 ```
+git clone https://github.com/kubernetes-incubator/external-storage.git  
 cd $GOPATH/src/github.com/kubernetes-incubator/external-storage/ceph/cephfs/deploy
 kubectl apply -f ./non-rbac
 ```
