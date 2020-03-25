@@ -1,0 +1,87 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: liveness-exec-pod
+  namespace: default
+spec:
+  containers:
+  - name: liveness-exec-container
+    image: busybox:latest
+    imagePullPolicy: IfNotPresent
+    command: ["/bin/sh","-c","touch /tmp/healthy; sleep 30; rm -f /tmp/healthy; sleep 3600"]
+    livenessProbe:
+      exec:
+        command: ["test","-e","/tmp/healthy"]
+      initialDelaySeconds: 1
+      periodSeconds: 3  #default to 10 seconds
+
+## pod的生命周期
+### 状态：Pending, Running, Failed, Succeeded, Unknown
+### 创建pod:
+### pod生命周期中的重要行为：
+######初始化容器
+######容器探测：liveness,readness
+## restartPolicy:
+### Always, OnFailure, Never. Default to Always.
+
+## 探针类型有三种：ExecAction, TCPSocketAction, HTTPGetAction
+## kubectl explain pods.spec.containers
+## kubectl explain pods.spec.containers.livenessProbe.exec
+## kubectl explain pods.spec.containers.livenessProbe.tcpSocket
+## kubectl explain pods.spec.containers.livenessProbe.httpGet
+
+## kubectl explain pods.spec.containers.lifecycle
+## kubectl explain pods.spec.containers.lifecycle.postStart
+## kubectl explain pods.spec.containers.lifecycle.preStop
+
+## 回顾pod
+### apiVersion, kind, metadata, spec, status(只读)
+######spec:
+#########containers
+#########nodeSelector
+#########nodeName
+#########restartPolicy: Always, Never, OnFailure
+
+#########containers:
+############names
+############image
+############imagePullPolicy: Always, Never, IfNOtPresent
+############ports:
+##############name:
+##############containerPort
+#####.....
+
+## pod控制器
+### ReplicationController:
+### ReplicaSet:
+### Deployment:
+### DaemonSet:      ### kubectl explain ds,kubectl get ds也支持滚动跟新
+### Job:
+### Cronjob:
+### StatefulSet:
+###### kubectl explain re.spec.selector
+###### kubectl get pods -o wide
+
+###### kubectl explain deploy
+###### kubectl explain deploy.spec.strategy
+###### kubectl get pods -l app=myapp -w
+###### kubectl rollout history deployment myapp-deploy
+###### kubectl patch --help
+###### kubectl patch deployment myapp-deploy -p '{"spec":{"replicas":5}}'
+###### kubectl patch deployment myapp-deploy -p '{"spec":{"strategy":{"rollingUpdate":{"maxSurge":1,"maxUnavailable":0}}}}'
+###### kubectl set image deployment myapp-deploy myapp==ikubernetes/myapp:v3 && kubectl rollout pause deployment myapp-deploy
+###### kubectl rollout status deployment myapp-deploy  ##监视当前动作
+###### pause: Mark the provided resource as paused
+###### resume: Resume a paused resource
+###### kubectl rollout resume deployment myapp-deploy
+
+###### kubectl rollout undo --help
+###### kubectl rollout history deployment myapp-deploy
+###### kubectl rollout undo deployment myapp-deploy --to-revision=1
+
+
+###### kubectl explain ds.spec.updateStrategy.rollingUpdate
+###### kubectl set image --help
+###### kubectl get ds   #DaemonSet也支持滚动跟新
+###### kubectl set image daemonsets filebeat-ds filebeat=ikubernetes/filebeat:5.6.6-alpine
+
