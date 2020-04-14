@@ -1,0 +1,4 @@
+openssl genrsa -out tls.key 2048
+openssl req -new -x509 -key tls.key -out tls.crt -subj /C=CN/ST=Beijing/L=Beijing/O=Devops/CN=jenkins.example.com
+kubectl create secret tls tls-jenkins --cert=tls.crt --key=tls.key -n kubernetes-plugin
+kubectl describe secret tls-jenkins
