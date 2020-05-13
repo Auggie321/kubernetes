@@ -1,0 +1,19 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: tomcat-jmx-demo
+  namespace: default
+  labels:
+    k8s-app: tomcat-jmx
+spec:
+  jobLabel: k8s-app
+  endpoints:
+  - port: prom
+    interval: 30s
+    # scheme: https
+  selector:
+    matchLabels:
+      k8s-app: tomcat-jmx
+  namespaceSelector:
+    matchNames:
+    - default
