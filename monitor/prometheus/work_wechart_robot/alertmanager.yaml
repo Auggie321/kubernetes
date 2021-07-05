@@ -1,0 +1,18 @@
+global:
+  resolve_timeout: 5m
+#templates:     ##消息模板
+#  - '*.tmpl'
+route:
+  group_by: ['alertname','job']
+  group_wait: 10s
+  group_interval: 10s
+  repeat_interval: 1m
+  receiver: 'webhook'
+ 
+receivers:
+- name: 'webhook'
+  webhook_configs:
+  - url: 'http://work-wechat-robot/prometheus_webhook'
+    send_resolved: true
+    http_config:
+      bearer_token: "24c2922a-56a3-4015-96bd-dedededededed"
