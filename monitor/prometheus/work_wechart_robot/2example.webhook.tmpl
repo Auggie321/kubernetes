@@ -1,0 +1,18 @@
+{{ $var := .externalURL}}{{ range $k,$v:=.alerts }}
+{{if eq $v.status "resolved"}}
+###### [MspTest恢复]({{$v.generatorURL}})
+> <font color="info">恢复项目</font>： {{$v.labels.alertname}}
+> <font color="info">告警级别</font>：{{$v.labels.severity}}
+> <font color="info">告警状态</font>：{{$v.status}}
+> <font color="info">开始时间</font>：{{GetCSTtime $v.startsAt}} 
+> <font color="info">恢复时间</font>：{{GetCSTtime $v.endsAt}}
+> <font color="info">恢复详情</font>： {{$v.annotations.description}}
+{{else}}
+###### [MspTest告警]({{$v.generatorURL}})
+> <font color="#FF0000">告警项目</font>：{{$v.labels.alertname}}
+> <font color="#FF0000">告警级别</font>：{{$v.labels.severity}}
+> <font color="#FF0000">告警状态</font>：{{$v.status}}
+> <font color="#FF0000">开始时间</font>：{{GetCSTtime $v.startsAt}}
+> <font color="#FF0000">告警详情</font>： {{$v.annotations.description}}
+{{end}}
+{{ end }}

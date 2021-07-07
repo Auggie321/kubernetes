@@ -1,0 +1,47 @@
+{
+    "receiver": "webhook",
+    "status": "firing",
+    "alerts": [
+        {
+            "status": "firing",
+            "labels": {
+                "alertname": "TargetDown",
+                "job": "prometheus-k8s",
+                "namespace": "monitoring",
+                "prometheus": "monitoring/k8s",
+                "service": "prometheus-k8s",
+                "severity": "warning"
+            },
+            "annotations": {
+                "description": "25% of the prometheus-k8s/prometheus-k8s targets in monitoring namespace are down.",
+                "runbook_url": "https://github.com/prometheus-operator/kube-prometheus/wiki/targetdown",
+                "summary": ""
+            },
+            "startsAt": "2021-07-07T04:38:52.088Z",
+            "endsAt": "0001-01-01T00:00:00Z",
+            "generatorURL": "http://prometheus-k8s-1:9090/graph?g0.expr=100+%2A+%28count+by%28job%2C+namespace%2C+service%29+%28up+%3D%3D+0%29+%2F+count+by%28job%2C+namespace%2C+service%29+%28up%29%29+%3E+10\u0026g0.tab=1",
+            "fingerprint": "a76a81eb10782504"
+        }
+    ],
+    "groupLabels": {
+        "alertname": "TargetDown",
+        "job": "prometheus-k8s"
+    },
+    "commonLabels": {
+        "alertname": "TargetDown",
+        "job": "prometheus-k8s",
+        "namespace": "monitoring",
+        "prometheus": "monitoring/k8s",
+        "service": "prometheus-k8s",
+        "severity": "warning"
+    },
+    "commonAnnotations": {
+        "description": "25% of the prometheus-k8s/prometheus-k8s targets in monitoring namespace are down.",
+        "runbook_url": "https://github.com/prometheus-operator/kube-prometheus/wiki/targetdown",
+        "summary": ""
+    },
+    "externalURL": "http://alertmanager-main-1:9093",
+    "version": "4",
+    "groupKey": "{}:{alertname=\"TargetDown\", job=\"prometheus-k8s\"}",
+    "truncatedAlerts": 0
+}
