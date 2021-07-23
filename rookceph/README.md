@@ -151,5 +151,25 @@ kubectl apply -f csi/cephfs/pvc.yaml
   
 Tutorials   
 [rook-ceph-disaster-recovery](https://github.com/rook/rook/blob/master/Documentation/ceph-disaster-recovery.md)  
+
+
 [clear-rook-ceph](https://github.com/rook/rook/blob/master/Documentation/ceph-teardown.md)  
+```
+
+## check the rook resources whether delete all, use as following command checking:
+
+kubectl api-resources --verbs=list --namespaced -o name \
+| xargs -n 1 kubectl get --show-kind --ignore-not-found -n rook-ceph
+
+
+kubectl delete -n rook-ceph cephblockpool replicapool 
+kubectl delete cephfilesystem.ceph.rook.io -n rook-ceph  myfs
+
+https://github.com/rook/rook/issues/6002
+if del stucking in command {replicapool,myfs}, use bellowing command:
+kubectl -n rook-ceph patch cephblockpool replicapool --type merge -p '{"metadata":{"finalizers": [null]}}'
+kubectl -n rook-ceph patch cephfilesystem myfs --type merge -p '{"metadata":{"finalizers": [null]}}'
+
+```
+
 [rook-ceph-osd-management](https://github.com/rook/rook/blob/master/Documentation/ceph-osd-mgmt.md#remove-an-osd)  
