@@ -105,7 +105,7 @@ ingress:
  kubectl exec jenkins-0 -c jenkins -- cat /run/secrets/chart-admin-passsword
 ```
 
-6.更改jenkins的admin密码
+5.更改jenkins的admin密码
 
 ```
 helm jenkins的admin密码是放在secret jenkins内部的；
